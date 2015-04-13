@@ -4,6 +4,14 @@ Plotting trees with data using R and Python
 
 [Python code (using ete2) - plotTree.py](#python-code)
 
+This is rough code that we use sometimes for making figures in my lab (http://holtlab.net). 
+
+There will definitely be bugs and there's lots more features one could add, and probably many ways these features could be implemented differently/better.
+
+So basically, I am putting this up here to share the love and save other people's time messing around with R, Python and ETE2, and so that others can use the code as the basis for their own functions or to learn how to do various handy things with these packages. If you find it useful and expand on it - please share!
+
+Kat Holt - @DrKatHolt - http://holtlab.net
+
 R code
 ==
 
