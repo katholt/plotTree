@@ -245,8 +245,179 @@ v <- plotTree(tree="tree.nwk",heatmapData="res_genes.csv",ancestral.reconstructi
 
 Python code
 ==
-Using the ete2 package
 
 # plotTree.py
 
-Instructions soon
+This is a Python script, that uses the Python package ETE2 (see http://ete.cgenomics.org/) which in turn requires pyqt4 and numpy. If you have BioPython then you will already have numpy. To install the rest, follow these steps:
+
+1. Download sip from http://www.riverbankcomputing.com/software/sip/download
+
+2. Unpack it (tar -xzvf sip.tar.gz) and cd into the directory (cd sip...)
+
+3. Run these commands:
+
+  python configure.py -d /Library/Python/2.7/site-packages --arch x86_64
+  
+  make
+  
+  sudo make install
+
+4. Download the Qt4 binary from http://qt.nokia.com/downloads/sdk-mac-os-cpp
+
+5. download PyQt4 from http://pyqt.sourceforge.net/Docs/PyQt4/installation.html
+
+6. unpack it and cd into the directory
+
+7. Run these commands:
+
+  python configure.py -q /usr/bin/qmake-4.8 -d /Library/Python/2.7/site-packages/ --use-arch x86_64
+  
+  make
+  
+  sudo make install
+
+8. Now you can install ETE2
+
+  sudo easy_install -U ete2
+
+To use ETE2 on your own, see http://ete.cgenomics.org/
+
+Running on contagion or merri
+
+The script will work on a remote server, but ONLY IF you add "-Y" to the ssh login command. Eg:
+
+  ssh -Y you@server.com
+
+
+plotTree.py - Options
+==
+
+# Required inputs
+
+--output tree.pdf
+
+- Name of output file
+- must end in .pdf or .png
+- the file type for the ouput figure is taken from this extension
+
+--tree tree.nwk
+
+- Tree file (newick format)
+
+--info info.csv
+
+- Data file in CSV format; column 1 matches leaf names, other columns contain data for labelling or plotting.
+
+Labelling and colour options (text or categorical values)
+==
+# (i) Print values directly as columns of text
+--labels LABELS [LABELS ...]
+
+- labels to print as text columns next to the tree (must match column headers in the info file)
+
+--tags
+
+- Switch on colour labelling of backgrounds to indicate values
+
+--padding PADDING     
+
+- padding between label columns (pixels, default 20)
+
+# (ii) Colour the leaf nodes
+--colour_nodes_by COLOUR_NODES_BY
+
+- label to use for colouring nodes
+
+--node_size NODE_SIZE
+
+-size for node shapes (default 10)
+
+# (iii) Use colour blocks to represent column values
+
+--colour_tags COLOUR_TAGS [COLOUR_TAGS ...]
+
+- labels to use to tag each element by colour code
+
+# (iv) Specify colours directly (otherwise expanded ColorBrewer Set1 is used)
+
+--colour_dict COLOUR_DICT
+
+- manually specify dictionary of values -> colours
+
+Data matrix options (numerical data)
+==
+
+--data DATA           
+
+- Data matrix (tab delmited; header row starts with "#Names col1 col2 etc...", column 1 matches leaf names, other columns should be numerical values for plotting)
+
+--data_type DATA_TYPE
+
+- Type of data plot ([heatmap], line_profiles, bars, cbars)
+- See ete2 docs for options
+
+--data_width DATA_WIDTH
+
+Total width of data plot for each strain (mm, default 200)
+
+--data_height DATA_HEIGHT
+
+
+- Total height of data plot for each strain (mm, default 20)
+
+--mindata MINDATA     Minimum data value for plotting scale (-1)
+
+--maxdata MAXDATA     Maximum data value for plotting scale (1)
+
+--centervalue CENTERVALUE
+
+- Central data value for plotting scale (0)
+
+Tree formatting options
+==
+--midpoint            Midpoint root the tree
+
+--outgroup OUTGROUP   Outgroup to root the tree
+
+--no_ladderize        Switch off ladderizing
+
+--show_leaf_names     Print leaf names as well as labels
+
+--branch_support      Print branch supports
+
+--no_guiding_lines    Turn off linking nodes to data with guiding lines
+
+--fan                 Plot tree as fan dendrogram
+
+--length_scale LENGTH_SCALE      scale (pixels per branch length unit)
+
+--branch_padding BRANCH_PADDING   branch (pixels between each branch, ie vertical padding)
+
+Branch supports
+==
+--branch_support_print   Print branch supports
+
+--branch_support_colour  Colour branch leading to node by branch supports (scale is 0=red -> 100=black)
+
+--branch_support_cutoff BRANCH_SUPPORT_CUTOFF  
+
+- Colour branches with support lower than this value (<cutoff = red; >= cutoff = black)
+
+Colour branches or clade backgrounds by value of descendant leaves
+==
+--colour_branches_by COLOUR_BRANCHES_BY  variable to use for colouring branches
+
+--colour_backgrounds_by COLOUR_BACKGROUNDS_BY  variable to use for colouring clade backgrounds
+
+Plotting options
+==
+--title TITLE         Title for plot
+
+--width WIDTH         width of output image pile (mm, default 200)
+
+--interactive         Switch on interactive view (after printing tree to file)
+
+
+plotTree script - examples
+==
+COMING SOON
