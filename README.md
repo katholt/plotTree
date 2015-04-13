@@ -1,4 +1,13 @@
-# plotTree
+Plotting trees with data using R and Python
+====
+[R code - plotTree.R](https://github.com/katholt/plotTree#R-code)
+
+[Python code (using ete2) - plotTree.py](https://github.com/katholt/plotTree#Python code)
+
+R code
+==
+
+# plotTree.R
 
 This is R code for plotting a phylogenetic tree and annotating the leaves with various information, including: 
 - colouring tips according to some variable (provided in infoFile; CSV format with column 1 = tip names)
@@ -232,3 +241,12 @@ heatmap.colours=c("white","grey","seagreen3","darkgreen","green","brown","tan","
 v <- plotTree(tree="tree.nwk",heatmapData="res_genes.csv",ancestral.reconstruction=F,tip.colour.cex=1,cluster=F,heatmap.colours=c("white","grey","seagreen3","darkgreen","green","brown","tan","red","orange","pink","magenta","purple","blue","skyblue3","blue","skyblue2"),tipColours=c("black","purple2","skyblue2","grey"),lwd=1,infoFile="info.csv",colourNodesBy="location",treeWidth=10,dataWidth=10,infoCols=c("name","year"),infoWidth=8)
 
 ![](tree_example_april2015/res_genes.png?raw=true)
+
+
+Python code
+==
+Using the ete2 package
+
+# plotTree.py
+
+Instructions soon
