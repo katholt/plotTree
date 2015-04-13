@@ -1,8 +1,8 @@
 Plotting trees with data using R and Python
 ====
-[R code - plotTree.R](https://github.com/katholt/plotTree#R-code)
+[R code - plotTree.R](#r-code)
 
-[Python code (using ete2) - plotTree.py](https://github.com/katholt/plotTree#Python code)
+[Python code (using ete2) - plotTree.py](#python-code)
 
 R code
 ==
