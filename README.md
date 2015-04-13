@@ -201,14 +201,22 @@ $strain_order: order of leaves in the tree
 
 # Examples
 
+Data (trees and tables) used in this example are available in the subdirectory /tree_example_april2015
+
 Basic strain info
 ---
 v<-plotTree(tree="tree.nwk",ancestral.reconstruction=F,tip.colour.cex=1,cluster=T,tipColours=c("black","purple2","skyblue2","grey"),lwd=1,infoFile="info.csv",colourNodesBy="location",treeWidth=10,infoWidth=10,infoCols=c("name","location","year"))
+
+![](tree_example_april2015/info.png?raw=true)
 
 Pan genome heatmap
 ---
 v<-plotTree(tree="tree.nwk",heatmapData="pan.csv",ancestral.reconstruction=F,tip.colour.cex=1,cluster=T,tipColours=c("black","purple2","skyblue2","grey"),lwd=1,infoFile="info.csv",colourNodesBy="location",treeWidth=5,dataWidth=20,infoCols=NA)
 
+![](tree_example_april2015/pan.png?raw=true)
+
 Curated genes, coloured
 ---
 v<-plotTree(tree="tree.nwk",heatmapData="res_genes.csv",ancestral.reconstruction=F,tip.colour.cex=1,cluster=F,heatmap.colours=c("white","grey","seagreen3","darkgreen","green","brown","tan","red","orange","pink","magenta","purple","blue","skyblue3","blue","skyblue2"),tipColours=c("black","purple2","skyblue2","grey"),lwd=1,infoFile="info.csv",colourNodesBy="location",treeWidth=10,dataWidth=10,infoCols=c("name","year"),infoWidth=8)
+
+![](tree_example_april2015/res_genes.png?raw=true)
