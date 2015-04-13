@@ -49,7 +49,7 @@ There are also options to:
 
 Tree plotting function
 --
-    plotTree(tree="tree.nwk",heatmapData="data.csv",infoFile="info.csv",barData="bar.csv",snpFile="alleles.csv", blockFile="blocksByStrain.txt")
+    p <- plotTree(tree="tree.nwk",heatmapData="data.csv",infoFile="info.csv",barData="bar.csv",snpFile="alleles.csv", blockFile="blocksByStrain.txt")
 
 
 Optionally, output to PDF:
@@ -205,18 +205,30 @@ Data (trees and tables) used in this example are available in the subdirectory /
 
 Basic strain info
 ---
-v<-plotTree(tree="tree.nwk",ancestral.reconstruction=F,tip.colour.cex=1,cluster=T,tipColours=c("black","purple2","skyblue2","grey"),lwd=1,infoFile="info.csv",colourNodesBy="location",treeWidth=10,infoWidth=10,infoCols=c("name","location","year"))
+Plot tree, colour tips by city of isolation, specify colours for each city manually, print strain details as table next to tree.
+
+v <- plotTree(tree="tree.nwk",ancestral.reconstruction=F,tip.colour.cex=1,cluster=T,tipColours=c("black","purple2","skyblue2","grey"),lwd=1,infoFile="info.csv",colourNodesBy="location",treeWidth=10,infoWidth=10,infoCols=c("name","location","year"))
 
 ![](tree_example_april2015/info.png?raw=true)
 
 Pan genome heatmap
 ---
-v<-plotTree(tree="tree.nwk",heatmapData="pan.csv",ancestral.reconstruction=F,tip.colour.cex=1,cluster=T,tipColours=c("black","purple2","skyblue2","grey"),lwd=1,infoFile="info.csv",colourNodesBy="location",treeWidth=5,dataWidth=20,infoCols=NA)
+Plot tree, colour tips by location (as above), cluster a gene content matrix and plot as heatmap next to the tree (white = 0% coverage of gene, black = 100% coverage of the gene).
+
+v <- plotTree(tree="tree.nwk",heatmapData="pan.csv",ancestral.reconstruction=F,tip.colour.cex=1,cluster=T,tipColours=c("black","purple2","skyblue2","grey"),lwd=1,infoFile="info.csv",colourNodesBy="location",treeWidth=5,dataWidth=20,infoCols=NA)
 
 ![](tree_example_april2015/pan.png?raw=true)
 
 Curated genes, coloured
 ---
-v<-plotTree(tree="tree.nwk",heatmapData="res_genes.csv",ancestral.reconstruction=F,tip.colour.cex=1,cluster=F,heatmap.colours=c("white","grey","seagreen3","darkgreen","green","brown","tan","red","orange","pink","magenta","purple","blue","skyblue3","blue","skyblue2"),tipColours=c("black","purple2","skyblue2","grey"),lwd=1,infoFile="info.csv",colourNodesBy="location",treeWidth=10,dataWidth=10,infoCols=c("name","year"),infoWidth=8)
+Plot tree, colour tips by location (as above), plot curated resistance gene information next to the tree as a heatmap... 
+
+Here the gene information in the heatmapData file is coded so that 0 represents absence, and different numbers are used to indicate presence of each gene/variant (e.g. in the gyrA column, one mutation is coded as 2 and the other is coded as 4).
+
+We then specify which colour to use for each number, using heatmap.colours... here 0 (ie absent) is white; 2 (ie gyrA mutant 1) is "seagreen3"; 4 (ie gyrA mutant 2) is "darkgreen", etc etc.
+
+heatmap.colours=c("white","grey","seagreen3","darkgreen","green","brown","tan","red","orange","pink","magenta","purple","blue","skyblue3","blue","skyblue2")
+
+v <- plotTree(tree="tree.nwk",heatmapData="res_genes.csv",ancestral.reconstruction=F,tip.colour.cex=1,cluster=F,heatmap.colours=c("white","grey","seagreen3","darkgreen","green","brown","tan","red","orange","pink","magenta","purple","blue","skyblue3","blue","skyblue2"),tipColours=c("black","purple2","skyblue2","grey"),lwd=1,infoFile="info.csv",colourNodesBy="location",treeWidth=10,dataWidth=10,infoCols=c("name","year"),infoWidth=8)
 
 ![](tree_example_april2015/res_genes.png?raw=true)
