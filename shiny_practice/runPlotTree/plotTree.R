@@ -1,8 +1,3 @@
-library(shiny)
-library(ape)
-
-### R PLOTTING CODE
-
 # read  data and convert to data frame
 readMatrix<-function(heatmapData){
 if (is.matrix(heatmapData)) {
@@ -323,20 +318,3 @@ if (!is.null(heatmapData)){mat=as.matrix(t(y.ordered))}
 else {mat=NULL}
 return(list(info=info.ordered,anc=ancestral,mat=mat,strain_order=tip.label.order))
 }
-
-### END R PLOTTING CODE
-
-shinyServer(function(input, output) {
-  output$Tree <- renderPlot({
-
-    treeFile <- input$tree
-    infoFile <- input$info
-    heatmapFile <- input$heatmap
-    
-    if (is.null(treeFile))
-      return(NULL)
-    
-      plotTree(tree=treeFile$datapath,infoFile=infoFile$datapath,heatmapData=heatmapFile$datapath)
-      
-  })
-})
