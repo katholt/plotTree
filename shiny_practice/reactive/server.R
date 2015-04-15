@@ -17,7 +17,7 @@ shinyServer(function(input, output) {
   	})
   	
 	cluster <- eventReactive(input$drawButton, {
-    	input$heat_cluster
+    	input$clustering
   	})
 
 	colour_nodes <- eventReactive(input$drawButton, {
@@ -27,6 +27,7 @@ shinyServer(function(input, output) {
   	tip_size <- eventReactive(input$drawButton, {
     	input$tip_size
   	})
+  	
   	
   output$Tree <- renderPlot({
 
@@ -40,9 +41,14 @@ shinyServer(function(input, output) {
     if (is.null(treeFile))
       return(NULL)
       
-    doPlotTree <-function(){  plotTree(tree=treeFile$datapath,infoFile=infoFile$datapath,
+    doPlotTree <-function(){  
+    
+    	plotTree(tree=treeFile$datapath,infoFile=infoFile$datapath,
       		heatmapData=heatmapFile$datapath,cluster=cluster,colourNodesBy=colour_nodes,
-      		tip.colour.cex=tip_size)  }
+      		tip.colour.cex=tip_size) 
+    }
+    
+    
 
 ### SAVE FIGURE
       
