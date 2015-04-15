@@ -23,7 +23,9 @@ shinyUI(fluidPage(
                 accept=c('text/csv', 
 								 '.csv')),
 								 
-	checkboxInput("heat_cluster", label = "Cluster heatmap", value = TRUE)
+	checkboxInput("heat_cluster", label = "Cluster heatmap", value = TRUE),
+ 
+ actionButton("goButton", "Go!")
  
     ),
     mainPanel(
