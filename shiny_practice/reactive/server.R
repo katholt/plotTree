@@ -73,7 +73,7 @@ shinyServer(function(input, output) {
       
       if(input$returnDownload){
 if(input$type == 'PDF'){
-                pdf("plot.pdf", width=as.numeric(input$w*3.94), height=as.numeric(input$h*3.94))
+                pdf("plot.pdf", width=as.numeric(input$w*0.039370), height=as.numeric(input$h*0.039370))
                 doPlotTree()
                 dev.off()
 
@@ -83,7 +83,7 @@ if(input$type == 'PDF'){
                 file.copy("plot.pdf", file)
             })
 } else if (input$type == "PNG"){
-png("plot.png", width=as.numeric(input$w*3.94), height=as.numeric(input$h*3.94))
+png("plot.png", width=as.numeric(input$w), height=as.numeric(input$h), units='mm', res=200)
                 doPlotTree()
                 dev.off()
               output$pdflink <- downloadHandler(
