@@ -29,6 +29,21 @@ shinyServer(function(input, output) {
   	})
   	
   	
+  	# heatmap colours
+  	start_col <- eventReactive(input$drawButton, {
+    	input$start_col
+  	})  	
+  	middle_col <- eventReactive(input$drawButton, {
+    	input$middle_col
+  	}) 	
+  	end_col <- eventReactive(input$drawButton, {
+    	input$end_col
+  	})
+  	heatmap_breaks <- eventReactive(input$drawButton, {
+    	input$heatmap_breaks
+  	})
+  	
+  	
   output$Tree <- renderPlot({
 
 	treeFile <- tree()
@@ -37,6 +52,10 @@ shinyServer(function(input, output) {
     cluster <- cluster()
     colour_nodes <- colour_nodes()
     tip_size <- tip_size()
+    start_col <- start_col()
+    middle_col <- middle_col()
+    end_col <- end_col()
+    heatmap_breaks <- as.integer(heatmap_breaks())
     
     if (is.null(treeFile))
       return(NULL)
@@ -45,7 +64,7 @@ shinyServer(function(input, output) {
     
     	plotTree(tree=treeFile$datapath,infoFile=infoFile$datapath,
       		heatmapData=heatmapFile$datapath,cluster=cluster,colourNodesBy=colour_nodes,
-      		tip.colour.cex=tip_size) 
+      		tip.colour.cex=tip_size,heatmap.colours=colorRampPalette(c(start_col,middle_col,end_col),space="rgb")(heatmap_breaks)) 
     }
     
     

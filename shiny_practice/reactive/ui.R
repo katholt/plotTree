@@ -1,5 +1,6 @@
 library(shiny)
 library(ape)
+library(RLumShiny)
 
 shinyUI(fluidPage(
   titlePanel("Plot tree"),
@@ -23,18 +24,28 @@ shinyUI(fluidPage(
 	### HEATMAP DATA
 	
       checkboxInput("chk_heatmap", "Heatmap file", value=TRUE),
+      
       conditionalPanel(
         condition = "input.chk_heatmap", "Heatmap",
         fileInput('heatmap', 'Choose heatmap file', multiple = F, accept = c('text/csv', '.csv')),
         
-        # This displays a check box if the user wants to change tree options
-        checkboxInput("optionsPrompt", "Check box if you wish to not use the default values.", value=FALSE),
-        conditionalPanel(
-          condition = "input.optionsPrompt", 
-          selectInput("clustering", label = "Columns clustering:", 
-                      choices = list("Select"=F, "Cluster based on density"=T, "Cluster according to tree"="square"), selected = "Select"), "Note: You can only cluster according to tree if your rows are equal to your tree tips. 
-             I.e. if you're viewing the dataset against itself.")
-      ),
+	# HEATMAP OPTIONS
+	checkboxInput("optionsPrompt", "Check box if you wish to not use the default values.", value=FALSE),
+	conditionalPanel(
+	  condition = "input.optionsPrompt", 
+	  selectInput("clustering", label = "Columns clustering:", 
+				  choices = list("Select"=F, "Cluster based on density"=T, "Cluster according to tree"="square"), selected = "Select"), 
+				  "Note: You can only cluster according to tree if your rows are equal to your tree tips. I.e. if you're viewing the dataset against itself.",
+
+		 
+	 jscolorInput(inputId="start_col", label="Start colour", value="FFFFFF", position = "bottom", color = "transparent", mode = "HSV", slider = T, close = T),
+     jscolorInput(inputId="middle_col", label="Middle colour", value="FFF94D", position = "bottom", color = "transparent", mode = "HSV", slider = T, close = T),
+     jscolorInput(inputId="end_col", label="End colour", value="1755FF", position = "bottom", color = "transparent", mode = "HSV", slider = T, close = T),
+	 textInput("heatmap_breaks", label = "Breaks", value = "100")
+
+				  )
+
+	),
  
  actionButton("drawButton", "Draw!"),
  
