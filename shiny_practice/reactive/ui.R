@@ -25,21 +25,19 @@ shinyUI(fluidPage(
 								 
 	checkboxInput("heat_cluster", label = "Cluster heatmap", value = TRUE),
  
- actionButton("goButton", "Go!"),
+ actionButton("drawButton", "Draw!"),
  
- checkboxInput('returnDownload', 'download?', FALSE),
+ checkboxInput('returnDownload', 'Download figure?', FALSE),
  
 	conditionalPanel(
             condition = "input.returnDownload == true",
-            sliderInput(inputId="w", label = "width (A4=210mm):", min=60, max=600, value=210, width='80%', ticks=F),
-            sliderInput(inputId="h", label = "height (A4=297mm):", min=60, max=600, value=297, width='80%', ticks=F),
-radioButtons("type", "Download type:",
+			radioButtons("type", "Download type:",
              c(#"SVG" = "SVG",
                "PDF" = "PDF",
-               "PNG" = "PNG")),
+               "PNG" = "PNG")),            sliderInput(inputId="w", label = "width (A4=210mm):", min=60, max=600, value=210, width='80%', ticks=F),
+            sliderInput(inputId="h", label = "height (A4=297mm):", min=60, max=600, value=297, width='80%', ticks=F),
             br(),
-            downloadLink('pdflink')
-            
+            downloadLink('pdflink')    
     )
     ),
     mainPanel(
