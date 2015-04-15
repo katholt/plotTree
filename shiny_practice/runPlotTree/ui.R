@@ -8,7 +8,7 @@ shinyUI(fluidPage(
  
       fileInput('tree', 'Choose tree file', multiple=F,
                 accept=c('biotree/newick', 
-								 '.nwk', '.tree'))
+								 '.nwk', '.tree')),
  
       fileInput('info', 'Choose info file', multiple=F,
                 accept=c('text/csv', 
