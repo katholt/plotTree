@@ -61,22 +61,6 @@ shinyServer(function(input, output, session) {
   	info_data <- eventReactive(input$drawButton, {
     	input$info_data
   	})
-  	
-  	returnDownload <- eventReactive(input$printButton, {
-    	input$returnDownload
-  	})
-  	
-  	download_type <- eventReactive(input$printButton, {
-    	input$download_type
-  	})
-  	
-  	h <- eventReactive(input$printButton, {
-    	input$h
-  	})
-
-  	w <- eventReactive(input$printButton, {
-    	input$w
-  	})
   	  	
 	# An event observer for changes to INFO CSV file
 	observeEvent(input$info_file, 
@@ -116,11 +100,6 @@ shinyServer(function(input, output, session) {
     chk_heatmap <- chk_heatmap()
     info_data <- info_data()
     
-    returnDownload <- returnDownload()
-    download_type <- download_type()
-    h <- h()
-    w <- w()
-    
     if (is.null(treeFile))
       return(NULL)
       
@@ -145,37 +124,6 @@ shinyServer(function(input, output, session) {
       		infoCols=show_column,
       		tip.colour.cex=tip_size,heatmap.colours=colorRampPalette(c(start_col,middle_col,end_col),space="rgb")(heatmap_breaks)) 
     }
-    
-    
-
-### SAVE FIGURE
-      
-      if(returnDownload){
-if(download_type == 'PDF'){
-                pdf("plot.pdf", width=as.numeric(w*0.039370), height=as.numeric(h*0.039370))
-                doPlotTree()
-                dev.off()
-
-              output$pdflink <- downloadHandler(
-            filename <- "myplot.pdf",
-            content <- function(file) {
-                file.copy("plot.pdf", file)
-            })
-} else if (download_type == "PNG"){
-png("plot.png", width=as.numeric(w), height=as.numeric(h), units='mm', res=200)
-                doPlotTree()
-                dev.off()
-              output$pdflink <- downloadHandler(
-            filename <- "myplot.png",
-            content <- function(file) {
-                file.copy("plot.png", file)
-            })
-} else {
-stop(paste("Unexpected type returned:", download_type))
-}
-            }
-            
-### END SAVE FIGURE   
 
       doPlotTree()
       
