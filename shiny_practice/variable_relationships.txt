@@ -1,0 +1,111 @@
+INPUTS:
+
+plotTree<-function(tree,heatmapData=NULL,barData=NULL,infoFile=NULL,blockFile=NULL,snpFile=NULL,gapChar="?",genome_size=5E6,blwd=5,block_colour="black",snp_colour="red",genome_offset=0,colourNodesBy=NULL,infoCols=NULL,outputPDF=NULL,outputPNG=NULL,w,h,heatmap.colours=rev(gray(seq(0,1,0.1))),tip.labels=F,tipLabelSize=1,offset=0,tip.colour.cex=0.5,legend=T,legend.pos="bottomleft",ancestral.reconstruction=F,cluster=NULL,tipColours=NULL,lwd=1.5,axis=F,axisPos=3,edge.color="black",infoCex=0.8,colLabelCex=0.8,treeWidth=10,infoWidth=10,dataWidth=30,edgeWidth=1,labelHeight=10,mainHeight=100,barDataWidth=10,blockPlotWidth=10,barDataCol=2,heatmapBreaks=NULL,heatmapDecimalPlaces=1,vlines.heatmap=NULL,vlines.heatmap.col=2,heatmap.blocks=NULL,pie.cex=0.5) {
+
+
+REQUIRED INPUT, NOT CONDITIONAL:
+tree -> require input file in newick format.
+
+tree options:
+
+(1) lwd=1.5
+[width of lines in tree]
+
+(2) edge.color="black"
+[colour of tree branches]
+
+(3) tip.labels=F
+print tip labels next to the leaves
+	if TRUE then can change:
+		tipLabelSize=1
+		offset=0
+
+CONDITIONAL RELATIONSHIPS:
+
+(1) metadata -> if this is checked, then display:
+
+	- input file to select table (to be passed to the function as infoFile=)
+	
+	- name of column to use to colour tree tips [optional]
+		- to be passed to colourNodesBy=
+		- only valid options are column names in the info file, so ideally would load this file first and then display the column names as a dropdown list to select from)
+		
+		=> if this is selected, display more options:
+			-> change size of the leaf node circles by setting tip.colour.cex=0.5
+			-> perform ancestral reconstruction? ancestral.reconstruction=F
+				-> if yes, optionally change pie.cex=0.5
+			-> change the default colour panel by setting tipColours=
+			-> turn off legend (set legend=F)
+			
+	- by default, if input file is provided, all columns will be printed next to the tree (infoCols=NULL)
+	
+		=> options:
+			- select names of columns to display (check boxes? or type list) infoCols=c()
+			- switch off (set to infoCols=NA)
+			
+			
+(2) heatmap data -> if this is checked, then display:
+
+	- input file to select datatable (to be passed to the function as heatmapData=)
+	
+	- option to change colour scheme (default heatmap.colours=rev(gray(seq(0,1,0.1))))
+	
+	- option to switch on clustering of columns (set cluster=T)
+	     OR
+	  option to switch on ordering of columns according to the tree
+	  	(IF the matrix is a square matrix, i.e. with columns names = tree tips as well as
+	  		row names = tree tips) (set cluster="square")
+	  		
+	EXPERT OPTIONS
+	- option to manually supply vector of breakpoints for heatmap values (heatmapBreaks=NULL)
+	
+	- option to specify decimal places to display in heatmap legend heatmapDecimalPlaces=1
+	
+	- option to draw vertical lines after columns 
+			e.g. lines after column 5 and 10, vlines.heatmap=c(5,10)
+		- set colour for these lines: vlines.heatmap.col=2
+		
+	- option to change size of column labels (colLabelCex=)
+	  
+(3) bar plots -> if this is checked, then display:
+
+	- input file to select table of data to be plotted as barplot (barData=)
+	
+	- set colour to use for plotting bar graphs: barDataCol=
+	
+(4) genome blocks -> if this is checked, then display:
+
+	- input file to select table of blocks (blockFile=NULL)
+	- MUST specify genome size for plotting (genome_size=) [*same as for snps]
+
+	- optionally:
+		- line width for drawing blocks (blwd=5)
+		- change colour for blocks (block_colour="black")
+	
+(5) SNPs -> if this is checked, then display:
+	
+	- input file to select table of blocks (snpFile=NULL)
+	- MUST specify genome size for plotting (genome_size=) [*same as for blocks]
+	
+	- optionally:
+		- character representing unknown bases/baps (gapChar="?")
+		- change colour for SNPs (snp_colour="red")
+		
+
+
+CONTROLLING THE RELATIVE SIZES OF THE ELEMENTS:
+
+WIDTHS (this is the order displayed)
+treeWidth=10
+infoWidth=10
+dataWidth=30
+barDataWidth=10
+blockPlotWidth=10
+
+HEIGHTS:
+mainHeight=100
+labelHeight=10
+
+EDGES (TOP, BOTTOM, LEFT, RIGHT)
+edgeWidth=1
+
