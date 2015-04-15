@@ -12,6 +12,10 @@ shinyUI(fluidPage(
  
       fileInput('info', 'Choose info file', multiple=F,
                 accept=c('text/csv', 
+								 '.csv')),
+								 
+	fileInput('heatmap', 'Choose heatmap file', multiple=F,
+                accept=c('text/csv', 
 								 '.csv'))
  
     ),

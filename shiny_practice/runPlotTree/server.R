@@ -331,11 +331,12 @@ shinyServer(function(input, output) {
 
     treeFile <- input$tree
     infoFile <- input$info
+    heatmapFile <- input$heatmap
     
-    if (is.null(treeFile) | is.null(infoFile))
+    if (is.null(treeFile))
       return(NULL)
     
-      plotTree(tree=treeFile$datapath,infoFile=infoFile$datapath)
+      plotTree(tree=treeFile$datapath,infoFile=infoFile$datapath,heatmapData=heatmapFile$datapath)
       
   })
 })
