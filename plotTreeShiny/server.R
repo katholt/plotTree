@@ -5,11 +5,11 @@ source("plotTree.R")
 shinyServer( function(input, output, session) {
 
 	# An event observer for changes to INFO CSV file
-	observeEvent(input$info_file, 
+	observeEvent(input$infoFile, 
 		{
 			# read the CSV file and get the column names.
 			# re-reading this file repeatedly is inefficient
-			df = read.table(input$info_file$datapath, header=TRUE, sep=',')
+			df = read.table(input$infoFile$datapath, header=TRUE, sep=',')
 			# build a list of values, this is what is required by update methods
 			info_cols = list()
 			for (v in colnames(df)) {
@@ -31,33 +31,40 @@ shinyServer( function(input, output, session) {
 			treeFile <- input$tree$datapath
 			
 			# metadata variables
-			infoFile <- input$info_file$datapath
+			infoFile <- input$infoFile
 			tip_size <- input$tip_size
 			colour_tips_by <- input$colour_tips_by
 			print_column <- input$print_column
 				
 			# heatmap variables
-			heatmap <- input$heatmap
+			heatmapFile <- input$heatmapFile
 			cluster <- input$clustering
 			heat_start_col <- input$start_col
 			heat_middle_col <- input$middle_col
 			heat_end_col <- input$end_col
 			heatmap_breaks <- as.integer(input$heatmap_breaks)
-	
+	      		
+	      		# bar plot variables
+			barFile <- input$barFile
+			barPlotColour <- input$barPlotColour
 	
 			# TRACK DATA TYPES TO PLOT
+			chk_info <- input$chk_info
 			chk_heatmap <- input$chk_heatmap
-			info_data <- input$info_data
+			chk_barPlot <- input$chk_barPlot
 	
 			if (is.null(treeFile))
 			  return(NULL)
 	  
-			if (!info_data) { infoFile <- NULL } 
-			else { infoFile <- infoFile }
+			if (!chk_info) { infoFile <- NULL } 
+			else { infoFile <- infoFile$datapath }
 	
 			if (!chk_heatmap) { heatmapFile <- NULL } 
 			else { heatmapFile <- heatmapFile$datapath }
-
+			
+			if (!chk_barPlot) { barFile <- NULL } 
+			else { barFile <- barFile$datapath }
+			
 		}) # end isolate
 
 
@@ -70,7 +77,7 @@ shinyServer( function(input, output, session) {
 			plotTree(tree=treeFile,
 				infoFile=infoFile, infoCols=print_column,
 				colourNodesBy=colour_tips_by, tip.colour.cex=tip_size,
-				heatmapData=heatmapFile, cluster=cluster,
+				heatmapData=heatmapFile, cluster=cluster, barData=barFile, barDataCol=barPlotColour,
 				heatmap.colours=colorRampPalette(c(heat_start_col,heat_middle_col,heat_end_col),space="rgb")(heatmap_breaks)) 
 		}
 
