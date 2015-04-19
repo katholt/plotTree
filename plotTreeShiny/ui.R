@@ -11,12 +11,12 @@ shinyUI(fluidPage(
 							accept=c('biotree/newick','.nwk', '.tree')),
 			
 			### METADATA (info file)
-			checkboxInput("info_data", "Metadata"),
+			checkboxInput("chk_info", "Metadata"),
 			
 			# OPTIONS TO DISPLAY IF METADATA CHECKED
 			conditionalPanel(
-				condition = "input.info_data",
-				fileInput('info_file', 'Upload metadata (CSV)'),
+				condition = "input.chk_info",
+				fileInput('infoFile', 'Upload metadata (CSV)'),
 				selectInput('print_column', 'Metadata columns to print:', c(''), multiple=TRUE),
 				selectInput('colour_tips_by', 'Colour tips by:', c('')),
 				sliderInput("tip_size", label = "Tip size", min = 0.1, max = 20, value = 0.5)
@@ -29,7 +29,7 @@ shinyUI(fluidPage(
 			conditionalPanel(
 				condition = "input.chk_heatmap",
 
-				fileInput('heatmap', 'Upload heatmap file (CSV)', multiple = F, accept = c('text/csv', '.csv')),
+				fileInput('heatmapFile', 'Upload heatmap file (CSV)', multiple = F, accept = c('text/csv', '.csv')),
 				selectInput("clustering", label = h5("Clustering:"), 
 					choices = list("Select..."=F, "Cluster columns by values"=T, "Square matrix"="square"),
 					selected = "Select"), 
@@ -44,6 +44,17 @@ shinyUI(fluidPage(
 					textInput("heatmap_breaks", label = "Breaks:", value = "100")
 				)
 			), # finished heatmap options
+			
+		      # BAR PLOT DATA
+		      checkboxInput("chk_barPlot", "Bar plot data", value=FALSE),
+		      
+		      # OPTIONS TO DISPLAY IF BAR PLOT CHECKED
+		      conditionalPanel(
+		        condition="input.chk_barPlot",
+		        fileInput("barFile", "Upload bar plot data file (CSV)", multiple=F, accept=c("text/csv", ".csv")),
+		      selectInput("barPlotColour", label=h5("Bar plot colour:"),
+		                  choices=list("Black"=1, "Red"=2, "Green"=3, "Blue"=4, "Cyan"=5, "Magenta"=6,
+		                               "Yellow"=7, "Gray"=8), selected=1)), # finished bar plot options
 
 			### DRAW BUTTON
 			actionButton("drawButton", "Draw!")
