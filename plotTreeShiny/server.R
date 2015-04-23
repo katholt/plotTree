@@ -16,17 +16,58 @@ shinyServer( function(input, output, session) {
 				info_cols[v] = v
 			}
 			# update the two input widgets using the column names
-			updateSelectInput(session, inputId='colour_tips_by', choices=c('',info_cols))
-			updateSelectInput(session, inputId='print_column', choices=info_cols)
+			updateSelectInput(session, inputId='colour_tips_by', choices=c('(none)',info_cols[-1]))
+			updateSelectInput(session, inputId='print_column', choices=c(info_cols[-1]))
+			
+			# switch on the meta data plotting option
+			updateCheckboxInput(session, inputId='info_data', value=TRUE)
 		}
 	)
-  
+	
+	# An event observer for changes to HEATMAP file
+	observeEvent(input$heatmap, 
+		{
+			# switch on the heatmap plotting option
+			updateCheckboxInput(session, inputId='chk_heatmap', value=TRUE)
+		}
+	)	
+	
+	# An event observer for changes to BAR DATA file
+	observeEvent(input$barData, 
+		{
+			# switch on the heatmap plotting option
+			updateCheckboxInput(session, inputId='chk_barplot', value=TRUE)
+		}
+	)	
+	
+	# An event observer for changes to BLOCKS file
+	observeEvent(input$blockFile, 
+		{
+			# switch on the heatmap plotting option
+			updateCheckboxInput(session, inputId='chk_blocks', value=TRUE)
+		}
+	)	
+
+	# An event observer for changes to SNPs file
+	observeEvent(input$snpFile, 
+		{
+			# switch on the heatmap plotting option
+			updateCheckboxInput(session, inputId='chk_snps', value=TRUE)
+		}
+	)	
+	  
 	output$Tree <- renderPlot({
   
 		input$drawButton == 0
 
 		### ALL VARIABLES PULLED FROM 'input' GO INSIDE HERE
 		isolate ( {
+		
+			l<-input$Layout
+			t<-input$Tree
+			i<-input$Info
+			o<-input$Other
+			d<-input$Data
 		
 			treeFile <- input$tree$datapath
 			
@@ -41,32 +82,34 @@ shinyServer( function(input, output, session) {
 			infoFile <- input$info_file$datapath
 			tip_size <- input$tip_size
 			colour_tips_by <- input$colour_tips_by
-			if (colour_tips_by == '') {colour_tips_by <- NA}
+			if (colour_tips_by == '(none)') {colour_tips_by <- NULL}
 			ancestral <- input$ancestral
 			pie_size <- input$pie_size
 			legend <- input$legend
 			legend_pos <- input$legend_pos
 			print_column <- input$print_column
+			print_metadata <- input$print_metadata
+			if (!print_metadata) { print_column <- NA }
 				
 			# heatmap variables
-			heatmap <- input$heatmap
+			heatmapFile <- input$heatmap$datapath
 			cluster <- input$clustering
 			heatmapDecimalPlaces <- as.integer(input$heatmapDecimalPlaces)
 			colLabelCex <- as.integer(input$colLabelCex)
 			vlines_heatmap_col <-input$vlines_heatmap_col
 			vlines_heatmap <- input$vlines_heatmap
 			
-			heatColoursSpecify <- input$heatColoursSpecify
+#			heatColoursSpecify <- input$heatColoursSpecify
 			
-			if (heatColoursSpecify) {
-				heatmap_colours <- input$heatmap_colour_vector
-			}
-			else {
+#			if (heatColoursSpecify) {
+#				heatmap_colours <- input$heatmap_colour_vector
+#			}
+#			else {
 				heatmap_colours <- colorRampPalette(c(input$start_col,input$middle_col,input$end_col),space="rgb")(as.integer(input$heatmap_breaks))
-			}
+#			}
 			
 			# barplot variables
-			barData <- input$barData$datapath
+			barDataFile <- input$barData$datapath
 			barDataCol <- input$barDataCol
 			
 			# block plot variables
@@ -75,8 +118,18 @@ shinyServer( function(input, output, session) {
 			blwd <- input$blwd
 			genome_size <- input$genome_size
 			
-			snpFile <- input$snpFile
+			snpFile <- input$snpFile$datapath
 			snp_colour <- input$snp_colour
+			
+			# Layout/spacing
+			tree_width <- as.numeric(input$tree_width)
+			info_width <- as.numeric(input$info_width)
+			heatmap_width <- as.numeric(input$heatmap_width)
+			bar_width <- as.numeric(input$bar_width)
+			genome_width <- as.numeric(input$genome_width)
+			main_height <- as.numeric(input$main_height)
+			label_height <- as.numeric(input$label_height)
+			edge_width <- as.numeric(input$edge_width)
 	
 			# TRACK DATA TYPES TO PLOT
 			chk_heatmap <- input$chk_heatmap
@@ -91,10 +144,10 @@ shinyServer( function(input, output, session) {
 			else { infoFile <- infoFile }
 	
 			if (!chk_heatmap) { heatmapFile <- NULL } 
-			else { heatmapFile <- heatmap$datapath }
+			else { heatmapFile <- heatmapFile }
 			
-			if (!chk_barplot) { barData <- NULL } 
-			else { barData <- barData }
+			if (!chk_barplot) { barDataFile <- NULL } 
+			else { barDataFile <- barDataFile }
 			
 			if (!chk_blocks) { blockFile <- NULL } 
 			else { blockFile <- blockFile }
@@ -122,10 +175,14 @@ shinyServer( function(input, output, session) {
 				heatmap.colours=heatmap_colours,
 				heatmapDecimalPlaces=heatmapDecimalPlaces, colLabelCex=colLabelCex,
 				vlines.heatmap=vlines_heatmap, vlines.heatmap.col=vlines_heatmap_col,
-				barData=barData, barDataCol=barDataCol,
+				barData=barDataFile, barDataCol=barDataCol,
 				blockFile=blockFile, block_colour=block_colour, blwd=blwd,
 				genome_size=genome_size,
-				snpFile=snpFile, snp_colour=snp_colour) 
+				snpFile=snpFile, snp_colour=snp_colour,
+				treeWidth=tree_width, infoWidth=info_width, dataWidth=heatmap_width,
+				barDataWidth=bar_width, blockPlotWidth=genome_width, 
+				mainHeight=main_height, labelHeight=label_height, edgeWidth=edge_width
+				) 
 		}
 
 		doPlotTree()
