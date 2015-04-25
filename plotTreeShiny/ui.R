@@ -2,65 +2,7 @@ library(shiny)
 library(ape)
 library(RLumShiny)
 shinyUI(fluidPage(
-<<<<<<< HEAD
-	titlePanel("Plot tree"),
-	sidebarLayout(
-		sidebarPanel(
-		
-			### UPLOAD TREE
-			fileInput('tree', 'Upload tree file (nwk)', multiple=F,
-							accept=c('biotree/newick','.nwk', '.tree')),
-			
-			### METADATA (info file)
-			checkboxInput("chk_info", "Metadata"),
-			
-			# OPTIONS TO DISPLAY IF METADATA CHECKED
-			conditionalPanel(
-				condition = "input.chk_info",
-				fileInput('infoFile', 'Upload metadata (CSV)'),
-				selectInput('print_column', 'Metadata columns to print:', c(''), multiple=TRUE),
-				selectInput('colour_tips_by', 'Colour tips by:', c('')),
-				sliderInput("tip_size", label = "Tip size", min = 0.1, max = 20, value = 0.5)
-			),	# finished metadata options	
 
-			### HEATMAP DATA
-			checkboxInput("chk_heatmap", "Heatmap data", value=FALSE),
-			
-			# OPTIONS TO DISPLAY IF HEATMAP CHECKED
-			conditionalPanel(
-				condition = "input.chk_heatmap",
-
-				fileInput('heatmapFile', 'Upload heatmap file (CSV)', multiple = F, accept = c('text/csv', '.csv')),
-				selectInput("clustering", label = h5("Clustering:"), 
-					choices = list("Select..."=F, "Cluster columns by values"=T, "Square matrix"="square"),
-					selected = "Select"), 
-				
-				# OPTIONALLY DISPLAY COLOUR OPTIONS
-				checkboxInput("heatColoursPrompt", "Change heatmap colours", value=FALSE),
-				conditionalPanel(
-					condition = "input.heatColoursPrompt", h5("Heatmap colour ramp:"),
-					jscolorInput(inputId="start_col", label="Start colour:", value="FFFFFF", position = "bottom", color = "transparent", mode = "HSV", slider = T, close = T),
-					jscolorInput(inputId="middle_col", label="Middle colour:", value="FFF94D", position = "bottom", color = "transparent", mode = "HSV", slider = T, close = T),
-					jscolorInput(inputId="end_col", label="End colour:", value="1755FF", position = "bottom", color = "transparent", mode = "HSV", slider = T, close = T),
-					textInput("heatmap_breaks", label = "Breaks:", value = "100")
-				)
-			), # finished heatmap options
-      
-      # BAR PLOT DATA
-      checkboxInput("chk_barPlot", "Bar plot data", value=FALSE),
-      
-      # OPTIONS TO DISPLAY IF BAR PLOT CHECKED
-      conditionalPanel(
-        condition="input.chk_barPlot",
-        fileInput("barFile", "Upload bar plot data file (CSV)", multiple=F, accept=c("text/csv", ".csv")),
-      selectInput("barPlotColour", label=h5("Bar plot colour:"),
-                  choices=list("Black"=1, "Red"=2, "Green"=3, "Blue"=4, "Cyan"=5, "Magenta"=6,
-                               "Yellow"=7, "Gray"=8), selected=1)),
-
-			### DRAW BUTTON
-			actionButton("drawButton", "Draw!")
-			
-=======
 	#titlePanel("Plot tree"),
 	sidebarLayout(
 		sidebarPanel(
@@ -71,13 +13,13 @@ shinyUI(fluidPage(
 		
 					### UPLOAD TREE
 					br(),
-					fileInput('tree', 'Upload tree file (nwk)', multiple=F,
+					fileInput('tree_file', 'Upload tree file (nwk)', multiple=F,
 									accept=c('biotree/newick','.nwk', '.tree')),
 			
 					checkboxInput("label_tips", "Label tree tips?", value=FALSE),
 					conditionalPanel(
 						condition = "input.label_tips",
-						textInput("tipLabelSize", label = "Text size", value = "1"),
+						textInput("tip_label_size", label = "Text size", value = "1"),
 						textInput("offset", label = "Offset", value = "0")
 					),
 				
@@ -91,9 +33,9 @@ shinyUI(fluidPage(
 					### METADATA (info file)
 					br(),
 					fileInput('info_file', 'Upload metadata (CSV)'),
-					checkboxInput('info_data', 'Use metadata', value = FALSE),
+					checkboxInput('chk_info', 'Use metadata', value = FALSE),
 					conditionalPanel(
-						condition = "input.info_data",
+						condition = "input.chk_info",
 						checkboxInput('print_metadata', 'Print columns', value = FALSE),
 						conditionalPanel(
 							condition = "input.print_metadata",
@@ -123,7 +65,7 @@ shinyUI(fluidPage(
 			
 					### HEATMAP DATA
 					br(),
-					fileInput('heatmap', 'Upload heatmap file (CSV)', multiple = F, accept = c('text/csv', '.csv')),
+					fileInput('heatmap_file', 'Upload heatmap file (CSV)', multiple = F, accept = c('text/csv', '.csv')),
 					checkboxInput('chk_heatmap', 'Plot heatmap', value = FALSE),
 					
 					conditionalPanel(
@@ -134,9 +76,9 @@ shinyUI(fluidPage(
 						"--------",
 			
 						# OPTIONALLY DISPLAY COLOUR OPTIONS
-						checkboxInput("heatColoursPrompt", "Change heatmap colour ramp", value=FALSE),
+						checkboxInput("heat_colours_prompt", "Change heatmap colour ramp", value=FALSE),
 						conditionalPanel(
-							condition = "input.heatColoursPrompt", 
+							condition = "input.heat_colours_prompt", 
 							jscolorInput(inputId="start_col", label="Start colour:", value="FFFFFF", position = "bottom", color = "transparent", mode = "HSV", slider = T, close = T),
 							jscolorInput(inputId="middle_col", label="Middle colour:", value="FFF94D", position = "bottom", color = "transparent", mode = "HSV", slider = T, close = T),
 							jscolorInput(inputId="end_col", label="End colour:", value="1755FF", position = "bottom", color = "transparent", mode = "HSV", slider = T, close = T),
@@ -148,8 +90,8 @@ shinyUI(fluidPage(
 	#						textInput("heatmap_colour_vector", label = "R code (vector), e.g. rev(gray(seq(0,1,0.1)))", value = "")
 	#					),
 						"--------",
-						textInput("heatmapDecimalPlaces", label = "Decimal places to show in heatmap legend:", value = "1"),
-						textInput("colLabelCex", label = "Text size for column labels:", value = "0.75")
+						textInput("heatmap_decimal_places", label = "Decimal places to show in heatmap legend:", value = "1"),
+						textInput("col_label_cex", label = "Text size for column labels:", value = "0.75")
 	#					textInput("vlines_heatmap", label = "y-coordinates for vertical lines (e.g. c(2,5)):", value = ""),
 	#					jscolorInput(inputId="vlines_heatmap_col", label=h5("Colour for vertical lines:"), value="1755FF", position = "bottom", color = "transparent", mode = "HSV", slider = T, close = T)
 					)
@@ -160,25 +102,25 @@ shinyUI(fluidPage(
 						tabPanel("Barplots",
 							br(),
 							# bar plots
-							fileInput('barData', 'Upload data for bar plots (CSV)', multiple = F, accept = c('text/csv', '.csv')),
+							fileInput('bar_data_file', 'Upload data for bar plots (CSV)', multiple = F, accept = c('text/csv', '.csv')),
 							checkboxInput('chk_barplot', 'Plot bar graphs', value = FALSE),
 					
 							conditionalPanel(
 								condition = "input.chk_barplot", h5("Barplot options"),
-								jscolorInput(inputId="barDataCol", label="Colour for barplots:", value="1755FF", position = "bottom", color = "transparent", mode = "HSV", slider = T, close = T)
+								jscolorInput(inputId="bar_data_col", label="Colour for barplots:", value="1755FF", position = "bottom", color = "transparent", mode = "HSV", slider = T, close = T)
 							)
 						),
 						
 						tabPanel("Genome blocks",
 							br(),
 							# genome blocks
-							fileInput('blockFile', 'Upload genome block coordinates', multiple = F, accept = c('text/tab', '.txt')),
+							fileInput('blocks_file', 'Upload genome block coordinates', multiple = F, accept = c('text/tab', '.txt')),
 							checkboxInput('chk_blocks', 'Plot genome blocks', value = FALSE),
 							
 							conditionalPanel(
 								condition = "input.chk_blocks", h5("Genome block plotting options"),
 								textInput("genome_size", label = "Genome size (bp):", value = "5E6"),
-								jscolorInput(inputId="block_colour", label="Colour for blocks:", value="1755FF", position = "bottom", color = "transparent", mode = "HSV", slider = T, close = T),
+								jscolorInput(inputId="blocks_colour", label="Colour for blocks:", value="1755FF", position = "bottom", color = "transparent", mode = "HSV", slider = T, close = T),
 								sliderInput("blwd", label = "Block size", min = 0.1, max = 20, value = 5)
 							)
 						),
@@ -186,13 +128,13 @@ shinyUI(fluidPage(
 						tabPanel("SNPs",
 							br(),
 							# snps
-							fileInput('snpFile', 'Upload SNP allele table (CSV)', multiple = F, accept = c('text/csv', '.csv')),
+							fileInput('snps_file', 'Upload SNP allele table (CSV)', multiple = F, accept = c('text/csv', '.csv')),
 							checkboxInput('chk_snps', 'Plot SNPs', value = FALSE),
 							
 							conditionalPanel(
 								condition = "input.chk_snps", h5("SNP plotting options"),
 								textInput("genome_size", label = "Genome size (bp):", value = "5E6"), # make this linked to previous conditional 
-								jscolorInput(inputId="snp_colour", label="Colour for SNPs:", value="1755FF", position = "bottom", color = "transparent", mode = "HSV", slider = T, close = T)
+								jscolorInput(inputId="snps_colour", label="Colour for SNPs:", value="1755FF", position = "bottom", color = "transparent", mode = "HSV", slider = T, close = T)
 							)
 						)
 					) #finished other data subtabs
@@ -219,11 +161,11 @@ shinyUI(fluidPage(
 			
 			### DRAW BUTTON
 			br(),
-			actionButton("drawButton", "Draw!")
+			actionButton("draw_button", "Draw!")
 			
 			# ADD PRINT BUTTON HERE
 			
->>>>>>> upstream/master
+
 		), # finished sidebarPanel
 
 		mainPanel(
@@ -232,8 +174,6 @@ shinyUI(fluidPage(
 		
 	) # finished sidebarLayout
 ) # fluidPage
-<<<<<<< HEAD
+
 ) # shinyUI
-=======
-) # shinyUI
->>>>>>> upstream/master
+

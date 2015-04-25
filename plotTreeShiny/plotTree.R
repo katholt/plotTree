@@ -111,11 +111,9 @@ y.ordered<-y.ordered[,rev(as.numeric(reordered))]
 
 else {
 # cluster columns
-<<<<<<< HEAD
-if (cluster==TRUE) {cluster="ward"} # set default clustering algorithm
-=======
+
 if (cluster==TRUE) {cluster="ward.D2"} # set default clustering algorithm
->>>>>>> upstream/master
+
 h<-hclust(dist(t(na.omit(y.ordered))),cluster)
 y.ordered<-y.ordered[,h$order]
 }
