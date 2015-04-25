@@ -1,3 +1,12 @@
+TO DO: choose colour palettes for node colours
+
+manually specifying R code for colour palette in heatmap isn't working...
+
+bar plots are not lined up
+
+plotting area for blocks isn't working properly
+
+
 INPUTS:
 
 plotTree<-function(tree,heatmapData=NULL,barData=NULL,infoFile=NULL,blockFile=NULL,snpFile=NULL,gapChar="?",genome_size=5E6,blwd=5,block_colour="black",snp_colour="red",genome_offset=0,colourNodesBy=NULL,infoCols=NULL,outputPDF=NULL,outputPNG=NULL,w,h,heatmap.colours=rev(gray(seq(0,1,0.1))),tip.labels=F,tipLabelSize=1,offset=0,tip.colour.cex=0.5,legend=T,legend.pos="bottomleft",ancestral.reconstruction=F,cluster=NULL,tipColours=NULL,lwd=1.5,axis=F,axisPos=3,edge.color="black",infoCex=0.8,colLabelCex=0.8,treeWidth=10,infoWidth=10,dataWidth=30,edgeWidth=1,labelHeight=10,mainHeight=100,barDataWidth=10,blockPlotWidth=10,barDataCol=2,heatmapBreaks=NULL,heatmapDecimalPlaces=1,vlines.heatmap=NULL,vlines.heatmap.col=2,heatmap.blocks=NULL,pie.cex=0.5) {
@@ -36,6 +45,7 @@ CONDITIONAL RELATIONSHIPS:
 				-> if yes, optionally change pie.cex=0.5
 			-> change the default colour panel by setting tipColours=
 			-> turn off legend (set legend=F)
+				-> legend.pos
 			
 	- by default, if input file is provided, all columns will be printed next to the tree (infoCols=NULL)
 	
@@ -58,21 +68,25 @@ CONDITIONAL RELATIONSHIPS:
 	  		
 	EXPERT OPTIONS
 	- option to manually supply vector of breakpoints for heatmap values (heatmapBreaks=NULL)
-	
+
+
+
 	- option to specify decimal places to display in heatmap legend heatmapDecimalPlaces=1
-	
+		
+	- option to change size of column labels (colLabelCex=)
+
 	- option to draw vertical lines after columns 
 			e.g. lines after column 5 and 10, vlines.heatmap=c(5,10)
 		- set colour for these lines: vlines.heatmap.col=2
-		
-	- option to change size of column labels (colLabelCex=)
-	  
+
+	- manually specify colour scheme
+
 (3) bar plots -> if this is checked, then display:
 
 	- input file to select table of data to be plotted as barplot (barData=)
 	
 	- set colour to use for plotting bar graphs: barDataCol=
-	
+
 (4) genome blocks -> if this is checked, then display:
 
 	- input file to select table of blocks (blockFile=NULL)
@@ -82,6 +96,8 @@ CONDITIONAL RELATIONSHIPS:
 		- line width for drawing blocks (blwd=5)
 		- change colour for blocks (block_colour="black")
 	
+<== DONE ==>
+
 (5) SNPs -> if this is checked, then display:
 	
 	- input file to select table of blocks (snpFile=NULL)
