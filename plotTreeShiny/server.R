@@ -19,10 +19,10 @@ shinyServer( function(input, output, session) {
 			# update the two input widgets using the column names
 
 			updateSelectInput(session, inputId='colour_tips_by', choices=c('(none)',info_cols[-1]))
-			updateSelectInput(session, inputId='print_column', choices=c(info_cols[-1]))
+			updateSelectInput(session, inputId='select_columns', choices=c(info_cols[-1]))
 			
 			# switch on the meta data plotting option
-			updateCheckboxInput(session, inputId='info_data', value=TRUE)
+			updateCheckboxInput(session, inputId='chk_data', value=TRUE)
 		}
 	)
 	
@@ -68,9 +68,9 @@ shinyServer( function(input, output, session) {
 		
 			l<-input$Layout
 			t<-input$Tree
-			i<-input$Info
+			i<-input$Metadata
 			o<-input$Other
-			d<-input$Data
+			d<-input$Heatmap
 		
 			tree_file <- input$tree_file$datapath
 			
@@ -90,9 +90,9 @@ shinyServer( function(input, output, session) {
 			pie_size <- input$pie_size
 			legend <- input$legend
 			legend_pos <- input$legend_pos
-			print_column <- input$print_column
-			print_metadata <- input$print_metadata
-			if (!print_metadata) { print_column <- NA }
+			select_columns <- input$select_columns
+			chk_print_metadata <- input$chk_print_metadata
+			if (!chk_print_metadata) { select_columns <- NA }
 				
 			# heatmap variables
 			heatmap_file <- input$heatmap_file$datapath
@@ -172,7 +172,7 @@ shinyServer( function(input, output, session) {
 			plotTree(tree=tree_file, 
 				tip.labels=label_tips, tipLabelSize=tip_label_size, offset=offset,
 				lwd=tree_line_width, edge.color=branch_colour,
-				infoFile=info_file, infoCols=print_column, 
+				infoFile=info_file, infoCols=select_columns, 
 				colourNodesBy=colour_tips_by, tip.colour.cex=tip_size, 
 				ancestral.reconstruction=ancestral, pie.cex=pie_size, 
 				legend=legend, legend.pos=legend_pos,
