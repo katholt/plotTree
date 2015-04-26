@@ -1,15 +1,11 @@
 library(shiny)
 library(ape)
 library(RLumShiny)
-library(grDevices)
 source("plotTree.R")
 
 # Please run this application in an external web browser but the built-in browser of shiny
 # Files: bin\app.R and bin\plotTree.R
 # Use runApp(appDir = "bin") to execute this application
-
-# This is a single-file shiny application
-# Use runApp("bin") to execute this program
 
 #======================== User interface ========================
 
@@ -159,9 +155,10 @@ ui <- fluidPage(
         tabPanel("Save",
                  br(),  # prints an empty line in the html file that is displayed as the UI
                  radioButtons(inputId = "format", label = "Download type:",
-                              choices = c("PNG" = "png", "PDF" = "pdf"), selected = "png"),            
-                 sliderInput(inputId = "w", label = "width (A4=210mm):", min = 60, max = 600, value = 210, width = '80%', ticks = FALSE),
-                 sliderInput(inputId = "h", label = "height (A4=297mm):", min = 60, max = 600, value = 297, width = '80%', ticks = FALSE),
+                              choices = c("PNG" = "png", "PDF" = "pdf"), selected = "png"),
+                 sliderInput(inputId = "w", label = "width (A4 = 210mm):", min = 180, max = 1200, value = 210, width = '80%', ticks = FALSE),
+                 sliderInput(inputId = "h", label = "height (A4 = 297mm):", min = 180, max = 1200, value = 297, width = '80%', ticks = FALSE),
+                 textInput("file_name", label = "File name", value = "figure"),  # The default file name is "figure".
                  downloadButton('downloadButton')  # This will generate a new variable 'downloadbutton'
         )  # end of tabPanel "Save"
       ), # finish tabsetPanel
@@ -363,10 +360,11 @@ server <- function(input, output, session) {
     filename = function() {
       # This is the default file name displayed in the download box poped up after clicking the download button.
       # You can change the filename in the download box.
+      f <- input$file_name
       if(input$format == "pdf"){
-        return("myplot.pdf")
+        return(paste(f, ".pdf", sep = ""))
       } else {
-        return("plot.png")
+        return(paste(f, ".png", sep = ""))
       }
     },
     
