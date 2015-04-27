@@ -73,16 +73,31 @@ return(list(m=as.matrix(m),w=w,h=h))
 }
 
 
-plotTree<-function(tree,heatmapData=NULL,barData=NULL,infoFile=NULL,blockFile=NULL,snpFile=NULL,gapChar="?",genome_size=5E6,blwd=5,block_colour="black",snp_colour="red",genome_offset=0,colourNodesBy=NULL,infoCols=NULL,outputPDF=NULL,outputPNG=NULL,w,h,heatmap.colours=rev(gray(seq(0,1,0.1))),tip.labels=F,tipLabelSize=1,offset=0,tip.colour.cex=0.5,legend=T,legend.pos="bottomleft",ancestral.reconstruction=F,cluster=NULL,tipColours=NULL,lwd=1.5,axis=F,axisPos=3,edge.color="black",infoCex=0.8,colLabelCex=0.8,treeWidth=10,infoWidth=10,dataWidth=30,edgeWidth=1,labelHeight=10,mainHeight=100,barDataWidth=10,blockPlotWidth=10,barDataCol=2,heatmapBreaks=NULL,heatmapDecimalPlaces=1,vlines.heatmap=NULL,vlines.heatmap.col=2,heatmap.blocks=NULL,pie.cex=0.5) {
+plotTree<-function(tree,ladderise=NULL,heatmapData=NULL,barData=NULL,infoFile=NULL,blockFile=NULL,snpFile=NULL,gapChar="?",genome_size=5E6,blwd=5,block_colour="black",snp_colour="red",genome_offset=0,colourNodesBy=NULL,infoCols=NULL,outputPDF=NULL,outputPNG=NULL,w,h,heatmap.colours=rev(gray(seq(0,1,0.1))),tip.labels=F,tipLabelSize=1,offset=0,tip.colour.cex=0.5,legend=T,legend.pos="bottomleft",ancestral.reconstruction=F,cluster=NULL,tipColours=NULL,lwd=1.5,axis=F,axisPos=3,edge.color="black",infoCex=0.8,colLabelCex=0.8,treeWidth=10,infoWidth=10,dataWidth=30,edgeWidth=1,labelHeight=10,mainHeight=100,barDataWidth=10,blockPlotWidth=10,barDataCol=2,heatmapBreaks=NULL,heatmapDecimalPlaces=1,vlines.heatmap=NULL,vlines.heatmap.col=2,heatmap.blocks=NULL,pie.cex=0.5) {
 
 require(ape)
 
-# PREPARE TREE AND GET TIP ORDER
+# PREPARE TREE, CHOOSE LADDERISATION OR NOT, AND GET TIP ORDER
 if (is.character(tree)){
 t<-read.tree(tree)
 }
 else t<-tree
-tl<-ladderize(t)
+if (is.null(ladderise))
+{
+tl<-t
+}
+else if (ladderise=="descending")
+{
+tl<-ladderize(t, T)
+}
+else if (ladderise=="ascending")
+{
+tl<-ladderize(t, F)
+}
+else if (!is.null(ladderise))
+{
+print("Ladderise option should be exactly 'ascending' or 'descending'.  Any other command will raise this error. Leave option empty to order branches as per input tree.")
+}
 tips<-tl$edge[,2]
 tip.order<-tips[tips<=length(tl$tip.label)]
 tip.label.order<-tl$tip.label[tip.order] # for ordering data. note that for tiplabel(), the order is the same as in t$tip (= tl$tip)
