@@ -363,10 +363,10 @@ def main():
 						node.img_style["fgcolor"] = this_colour
 						node.img_style["size"] = args.node_size
 				
-	if args.branch_thickness is not None:
-		for node in tree.traverse():
-			node.img_style["hz_line_width"] = args.branch_thickness
-			node.img_style["vt_line_width"] = args.branch_thickness
+
+	for node in tree.traverse():
+		node.img_style["hz_line_width"] = args.branch_thickness
+		node.img_style["vt_line_width"] = args.branch_thickness
 			
 	# set tree style
 	ts = TreeStyle()
