@@ -72,6 +72,7 @@ def parse_args():
 	parser.add_argument('--outgroup', type=str, required=False, help='Outgroup to root the tree')
 	parser.add_argument('--no_ladderize', action="store_true", required=False, help='Switch off ladderizing')
 	parser.add_argument('--interactive', action="store_true", required=False, help='Switch on interactive view (after printing tree to file)')
+	parser.add_argument('--branch_thickness', type=int, required=False, help='Increase branch thickness', default=10)
 	return parser.parse_args() 
 
 
@@ -362,7 +363,10 @@ def main():
 						node.img_style["fgcolor"] = this_colour
 						node.img_style["size"] = args.node_size
 				
-			
+	if args.branch_thickness is not None:
+		for node in tree.traverse():
+			node.img_style["hz_line_width"] = args.branch_thickness
+			node.img_style["vt_line_width"] = args.branch_thickness
 			
 	# set tree style
 	ts = TreeStyle()
