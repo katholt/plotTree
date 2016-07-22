@@ -10,22 +10,24 @@ shinyServer( function(input, output, session) {
 			# read the CSV file and get the column names.
 			# re-reading this file repeatedly is inefficient
 			df = read.table(input$info_file$datapath, header=TRUE, sep=',')
+
 			# build a list of values, this is what is required by update methods
 			info_cols = list()
 			for (v in colnames(df)) {
 				info_cols[v] = v
 			}
 			# update the two input widgets using the column names
+
 			updateSelectInput(session, inputId='colour_tips_by', choices=c('(none)',info_cols[-1]))
-			updateSelectInput(session, inputId='print_column', choices=c(info_cols[-1]))
+			updateSelectInput(session, inputId='select_columns', choices=c(info_cols[-1]))
 			
 			# switch on the meta data plotting option
-			updateCheckboxInput(session, inputId='info_data', value=TRUE)
+			updateCheckboxInput(session, inputId='chk_data', value=TRUE)
 		}
 	)
 	
 	# An event observer for changes to HEATMAP file
-	observeEvent(input$heatmap, 
+	observeEvent(input$heatmap_file, 
 		{
 			# switch on the heatmap plotting option
 			updateCheckboxInput(session, inputId='chk_heatmap', value=TRUE)
@@ -33,7 +35,7 @@ shinyServer( function(input, output, session) {
 	)	
 	
 	# An event observer for changes to BAR DATA file
-	observeEvent(input$barData, 
+	observeEvent(input$bar_data_file, 
 		{
 			# switch on the heatmap plotting option
 			updateCheckboxInput(session, inputId='chk_barplot', value=TRUE)
@@ -41,7 +43,7 @@ shinyServer( function(input, output, session) {
 	)	
 	
 	# An event observer for changes to BLOCKS file
-	observeEvent(input$blockFile, 
+	observeEvent(input$blocks_file, 
 		{
 			# switch on the heatmap plotting option
 			updateCheckboxInput(session, inputId='chk_blocks', value=TRUE)
@@ -49,37 +51,38 @@ shinyServer( function(input, output, session) {
 	)	
 
 	# An event observer for changes to SNPs file
-	observeEvent(input$snpFile, 
+	observeEvent(input$snps_file, 
 		{
 			# switch on the heatmap plotting option
 			updateCheckboxInput(session, inputId='chk_snps', value=TRUE)
 		}
 	)	
 	  
+
 	output$Tree <- renderPlot({
   
-		input$drawButton == 0
+		input$draw_button == 0
 
 		### ALL VARIABLES PULLED FROM 'input' GO INSIDE HERE
 		isolate ( {
 		
 			l<-input$Layout
 			t<-input$Tree
-			i<-input$Info
+			i<-input$Metadata
 			o<-input$Other
-			d<-input$Data
+			d<-input$Heatmap
 		
-			treeFile <- input$tree$datapath
+			tree_file <- input$tree_file$datapath
 			
 			# tree plotting options
 			label_tips <- input$label_tips
 			tree_line_width <- as.integer(input$tree_line_width)
 			branch_colour <- input$branch_colour
-			tipLabelSize <- as.integer(input$tipLabelSize)
+			tip_label_size <- as.integer(input$tip_label_size)
 			offset <- as.integer(input$offset)
 			
 			# metadata variables
-			infoFile <- input$info_file$datapath
+			info_file <- input$info_file$datapath
 			tip_size <- input$tip_size
 			colour_tips_by <- input$colour_tips_by
 			if (colour_tips_by == '(none)') {colour_tips_by <- NULL}
@@ -87,15 +90,15 @@ shinyServer( function(input, output, session) {
 			pie_size <- input$pie_size
 			legend <- input$legend
 			legend_pos <- input$legend_pos
-			print_column <- input$print_column
-			print_metadata <- input$print_metadata
-			if (!print_metadata) { print_column <- NA }
+			select_columns <- input$select_columns
+			chk_print_metadata <- input$chk_print_metadata
+			if (!chk_print_metadata) { select_columns <- NA }
 				
 			# heatmap variables
-			heatmapFile <- input$heatmap$datapath
+			heatmap_file <- input$heatmap_file$datapath
 			cluster <- input$clustering
-			heatmapDecimalPlaces <- as.integer(input$heatmapDecimalPlaces)
-			colLabelCex <- as.integer(input$colLabelCex)
+			heatmap_decimal_places <- as.integer(input$heatmap_decimal_places)
+			col_label_cex <- as.integer(input$col_label_cex)
 			vlines_heatmap_col <-input$vlines_heatmap_col
 			vlines_heatmap <- input$vlines_heatmap
 			
@@ -109,17 +112,17 @@ shinyServer( function(input, output, session) {
 #			}
 			
 			# barplot variables
-			barDataFile <- input$barData$datapath
-			barDataCol <- input$barDataCol
+			bar_data_file <- input$bar_data_file$datapath
+			bar_data_col <- input$bar_data_col
 			
 			# block plot variables
-			blockFile <- input$blockFile$datapath
-			block_colour <- input$block_colour
+			blocks_file <- input$blocks_file$datapath
+			blocks_colour <- input$blocks_colour
 			blwd <- input$blwd
 			genome_size <- input$genome_size
 			
-			snpFile <- input$snpFile$datapath
-			snp_colour <- input$snp_colour
+			snps_file <- input$snps_file$datapath
+			snps_colour <- input$snps_colour
 			
 			# Layout/spacing
 			tree_width <- as.numeric(input$tree_width)
@@ -133,27 +136,28 @@ shinyServer( function(input, output, session) {
 	
 			# TRACK DATA TYPES TO PLOT
 			chk_heatmap <- input$chk_heatmap
-			info_data <- input$info_data
+			chk_info <- input$chk_info
 			chk_barplot <- input$chk_barplot
 			chk_blocks <- input$chk_blocks
 			chk_snps <- input$chk_snps
 	
-			if (is.null(treeFile)) { return(NULL) }
+			if (is.null(tree_file)) { return(NULL) }
 	  
-			if (!info_data) { infoFile <- NULL } 
-			else { infoFile <- infoFile }
+			if (!chk_info) { info_file <- NULL } 
+			else { info_file <- info_file }
 	
-			if (!chk_heatmap) { heatmapFile <- NULL } 
-			else { heatmapFile <- heatmapFile }
+			if (!chk_heatmap) { heatmap_file <- NULL } 
+			else { heatmap_file <- heatmap_file }
 			
-			if (!chk_barplot) { barDataFile <- NULL } 
-			else { barDataFile <- barDataFile }
+			if (!chk_barplot) { bar_data_file <- NULL } 
+			else { bar_data_file <- bar_data_file }
 			
-			if (!chk_blocks) { blockFile <- NULL } 
-			else { blockFile <- blockFile }
+			if (!chk_blocks) { blocks_file <- NULL } 
+			else { blocks_file <- blocks_file }
 			
-			if (!chk_snps) { snpFile <- NULL } 
-			else { snpFile <- snpFile }
+			if (!chk_snps) { snps_file <- NULL } 
+			else { snps_file <- snps_file }
+
 
 		}) # end isolate
 
@@ -164,25 +168,27 @@ shinyServer( function(input, output, session) {
 		doPlotTree <-function() {  
 	
 			# underlying call to plotTree(), drawn to screen and to file
-			plotTree(tree=treeFile, 
-				tip.labels=label_tips, tipLabelSize=tipLabelSize, offset=offset,
+
+			plotTree(tree=tree_file, 
+				tip.labels=label_tips, tipLabelSize=tip_label_size, offset=offset,
 				lwd=tree_line_width, edge.color=branch_colour,
-				infoFile=infoFile, infoCols=print_column, 
+				infoFile=info_file, infoCols=select_columns, 
 				colourNodesBy=colour_tips_by, tip.colour.cex=tip_size, 
 				ancestral.reconstruction=ancestral, pie.cex=pie_size, 
 				legend=legend, legend.pos=legend_pos,
-				heatmapData=heatmapFile, cluster=cluster,
+				heatmapData=heatmap_file, cluster=cluster,
 				heatmap.colours=heatmap_colours,
-				heatmapDecimalPlaces=heatmapDecimalPlaces, colLabelCex=colLabelCex,
+				heatmapDecimalPlaces=heatmap_decimal_places, colLabelCex=col_label_cex,
 				vlines.heatmap=vlines_heatmap, vlines.heatmap.col=vlines_heatmap_col,
-				barData=barDataFile, barDataCol=barDataCol,
-				blockFile=blockFile, block_colour=block_colour, blwd=blwd,
+				barData=bar_data_file, barDataCol=bar_data_col,
+				blockFile=blocks_file, block_colour=blocks_colour, blwd=blwd,
 				genome_size=genome_size,
-				snpFile=snpFile, snp_colour=snp_colour,
+				snpFile=snps_file, snp_colour=snps_colour,
 				treeWidth=tree_width, infoWidth=info_width, dataWidth=heatmap_width,
 				barDataWidth=bar_width, blockPlotWidth=genome_width, 
 				mainHeight=main_height, labelHeight=label_height, edgeWidth=edge_width
 				) 
+
 		}
 
 		doPlotTree()
@@ -190,3 +196,4 @@ shinyServer( function(input, output, session) {
 	}) # end render plot
 	
 }) # shinyServer
+
